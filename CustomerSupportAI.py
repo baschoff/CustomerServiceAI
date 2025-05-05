@@ -1,58 +1,162 @@
-import yaml
+# Customer Support AI Bot
+# This bot uses forward and backward chaining to provide responses based on user queries.
+all_facts = ['offer_cpu_intel', 'offer_cpu_amd','offer_motherboard_intel', 'offer_motherboard_amd', 
+         'offer_ram_ddr4', 'offer_ram_ddr5', 'offer_ssd', 'offer_gpu_nvidea','offer_gpu_amd']
 
-# Knowledge base
-knowledge_base = """
-Instructions:
-  refund_policy:
-    keywords: ["refund", "return", "money back"]
-    response: "Our refund policy allows returns within 30 days of purchase. Please visit https://example.com/refund for more info."
+responseDictionary = {
+    'offer_cpu_intel': "We offer an Intel CPU.",
+    'offer_cpu_amd': "We offer an AMD CPU.",
+    'offer_motherboard_intel': "We offer an Intel motherboard.",
+    'offer_motherboard_amd': "We offer an AMD motherboard.",
+    'offer_ram_ddr4': "We offer an DDR4 RAM.",
+    'offer_ram_ddr5': "We offer an DDR5 RAM.",
+    'offer_ssd': "We offer an SSD.",
+    'offer_gpu_nvidea': "We offer an NVIDIA GPU.",
+    'offer_gpu_amd': "We offer an AMD GPU."
+}
 
-  technical_issue:
-    keywords: ["error", "issue", "problem", "crash"]
-    response: "We're sorry you're facing issues. Please try restarting the app or contact support."
+queryDictionary = {
+    # offers
+    "offer intel cpu": 'offer_cpu_intel',
+    "offer amd cpu": 'offer_cpu_amd',
+    "offer intel motherboard": 'offer_motherboard_intel',
+    "offer amd motherboard": 'offer_motherboard_amd',
+    "offer ddr4 ram": 'offer_ram_ddr4',
+    "offer ddr5 ram": 'offer_ram_ddr5',
+    "offer ssd": 'offer_ssd',
+    "offer nvidia gpu": 'offer_gpu_nvidea',
+    "offer amd gpu": 'offer_gpu_amd',
+    "offer budget": 'budget',
+    "offer premium": 'premium',
+    "offer intel": 'offer_intel',
+    "offer amd": 'offer_amd',
+    "offer nvidea": 'offer_nvidia',
+    "offer gpu": 'offer_gpu',
+    "offer cpu": 'offer_cpu',
+    "offer motherboard": 'offer_motherboard',
+    "offer ram": 'offer_ram',
 
-  order_status:
-    keywords: ["status", "tracking", "delivery", "late", "order"]
-    response: "You can check your order status at https://example.com/order-status."
+    # interests
+    "interested in budget": 'interest_budget',
+    "interested in premium": 'interest_premium',
+    "interested in intel": 'interest_intel',
+    "interested in amd": 'interest_amd',
+    "interested in nvidea": 'interest_nvidia',
+    "interested in ddr4": 'interest_ddr4',
+    "interested in ddr5": 'interest_ddr5',
+    "interested in ssd": 'interest_ssd',
+    "interested in cpu": 'interest_cpu',
+    "interested in gpu": 'interest_gpu',
+    "interested in motherboard": 'interest_motherboard',
+    "interested in ram": 'interest_ram',
+    "interested in intel cpu": 'interest_cpu_intel',
+    "interested in amd cpu": 'interest_cpu_amd',
+    "interested in intel motherboard": 'interest_motherboard_intel',
+    "interested in amd motherboard": 'interest_motherboard_amd',
+    "interested in amd gpu": 'interest_gpu_amd',
+    "interested in nvidia gpu": 'interest_gpu_nvidia',
 
-  account_help:
-    keywords: ["login", "password", "account", "sign in"]
-    response: "For account issues, please visit https://example.com/account-help."
-"""
+    # recommendations
+    "recommend budget": 'recommend_budget',
+    "recommend premium": 'recommend_premium',
+    "recommend intel": 'recommend_intel',
+    "recommend amd": 'recommend_amd',
+    "recommend nvidea": 'recommend_nvidia',
+    "recommend ddr4": 'recommend_ddr4',
+    "recommend ddr5": 'recommend_ddr5',
+    "recommend ssd": 'recommend_ssd',
+    "recommend cpu": 'recommend_cpu',
+    "recommend gpu": 'recommend_gpu',
+    "recommend motherboard": 'recommend_motherboard',
+    "recommend ram": 'recommend_ram',
+    "recommend intel cpu": 'recommend_intel_cpu',
+    "recommend amd cpu": 'recommend_amd_cpu',
+    "recommend intel motherboard": 'recommend_intel_motherboard',
+    "recommend amd motherboard": 'recommend_amd_motherboard',
+    "recommend nvidia gpu": 'recommend_nvidia_gpu',
+    "recommend amd gpu": 'recommend_amd_gpu',
+    "recommend brand": 'recommend_brand',
+}
 
-# Load YAML knowledge base 
-kb = yaml.safe_load(knowledge_base)["Instructions"]
+starter_facts = ['offer_cpu_intel']
 
-# Classify user query based on keywords
-def classify_query(query):
-    query = query.lower()
-    matching_categories = []
-    for category, data in kb.items():
-        if any(keyword in query for keyword in data["keywords"]):
-            matching_categories.append(category)
-    return matching_categories
+rules = [
+    ({'interest_budget'}, {'recommend_budget_cpu', 'recommend_budget_motherboard', 'recommend_budget_ram', 'recommend_ budget_gpu', 'recommend_budget_ssd'}), 
+    ({'interest_premium'}, {'recommend_premium_cpu', 'recommend_premium_motherboard', 'recommend_premium_ram', 'recommend_ premium_gpu', 'recommend_premium_ssd'}),
 
-# Get response based on category 
-def get_response(categories):
-    if not categories:
+]
+
+# Function to extract keywords and responses from the knowledge base
+def forward_chain(facts, rules):
+    inferred = set()
+    total_facts = set(facts)
+    while True:
+        new_inference = set()
+        for conditions, conclusions in rules:
+            if conditions.issubset(total_facts):
+                for conclusion in conclusions:
+                    if conclusion not in total_facts:
+                        new_inference.add(conclusion)
+        if not new_inference:
+            break
+        inferred.update(new_inference)
+        total_facts.update(new_inference)
+    return inferred
+
+# Backward Chaining (New Code)
+def backward_chain(goal, rules, known_facts):
+    if goal in known_facts:
+        return True
+    for conditions, conclusions in rules:
+        if goal in conclusions:
+            if all(backward_chain(condition, rules, known_facts) for condition in conditions):
+                return True
+    return False
+
+#def classify_query(query):
+
+def get_response(dictionary, keywords):
+    output = []
+    if not keywords:
         return ["I'm not sure how to help with that. Please contact support."]
-    return [kb[category]["response"] for category in categories]
+    for key in keywords:
+        if key not in dictionary:
+            output.append("I'm not sure how to help with that. Please contact support.")
+        else:
+            output.append(dictionary[key])
+    return output
+        
 
 def run_bot():
+    global starter_facts
     print("Welcome to the AI Support Bot!")
     print("Type your question (or 'exit' to quit):\n")
-    
+
     while True:
         query = input("You: ")
         if query.lower().strip() == "exit":
             print("Bot: Goodbye!")
             break
-        categories = classify_query(query)
-        responses = get_response(categories)
-        for response in responses:
-          print(f"Bot: {response}")
+        if query.lower() not in queryDictionary:
+            print("Bot: Sorry, I don't understand that request.")
+            continue
+        query = queryDictionary[query.lower()]
+        #categories = classify_query(query)
+        inferred_facts = forward_chain(starter_facts, rules)
+        starter_facts = list(set(starter_facts).union(inferred_facts))
+        # Backward Chaining: Check if user query can be satisfied
+        goal = query.lower()  # User query might match a fact or goal
+        backward_result = backward_chain(goal, rules, starter_facts)
+        
+        if backward_result:
+            print("Bot: Yes, this is possible!")
+        else:
+            print("Bot: I'm not sure, but I will check for related facts.")
+            responses = get_response(responseDictionary, inferred_facts)
+            for value in responses:
+                print(f"Bot: {value}")
         print()
-
+        
 
 if __name__ == "__main__":
     run_bot()
