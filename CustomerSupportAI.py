@@ -129,7 +129,15 @@ def backward_chain(goal, rules, known_facts):
                 return True
     return False
 
-#def classify_query(query):
+def classify_query(query):
+    if query.startswith("interest_"):
+        return "interest"
+    elif query.startswith("offer_"):
+        return "offer"
+    elif query.startswith("recommend_"):
+        return "recommendation"
+    else:
+        return "None"
 
 def get_response(dictionary, keywords):
     output = []
