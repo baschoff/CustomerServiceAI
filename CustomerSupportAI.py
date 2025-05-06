@@ -78,7 +78,11 @@ queryDictionary = {
     "recommend brand": 'recommend_brand',
 }
 
-starter_facts = ['offer_cpu_intel']
+starter_facts = [
+    'offer_cpu_intel', 'offer_cpu_amd', 'offer_motherboard_intel',
+    'offer_motherboard_amd', 'offer_ram_ddr4', 'offer_ram_ddr5',
+    'offer_ssd', 'offer_gpu_nvidia', 'offer_gpu_amd'
+]
 
 rules = [
     # Budget interests
