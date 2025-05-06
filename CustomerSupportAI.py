@@ -161,29 +161,38 @@ def run_bot():
     print("Type your question (or 'exit' to quit):\n")
 
     while True:
-        query = input("You: ")
-        if query.lower().strip() == "exit":
+        query = input("You: ").lower().strip()
+        if query == "exit":
             print("Bot: Goodbye!")
             break
-        if query.lower() not in queryDictionary:
+
+        if query not in queryDictionary:
             print("Bot: Sorry, I don't understand that request.")
             continue
-        query = queryDictionary[query.lower()]
-        #categories = classify_query(query)
+
+        query_fact = queryDictionary[query]
+        starter_facts.append(query_fact)
+
+        # Forward chaining to infer new facts
         inferred_facts = forward_chain(starter_facts, rules)
         starter_facts = list(set(starter_facts).union(inferred_facts))
-        # Backward Chaining: Check if user query can be satisfied
-        goal = query.lower()  # User query might match a fact or goal
-        backward_result = backward_chain(goal, rules, starter_facts)
-        
-        if backward_result:
+
+        # If direct response exists, give it
+        if query_fact in responseDictionary:
+            print(f"Bot: {responseDictionary[query_fact]}")
+            continue
+
+        # Try backward chaining for goal
+        if backward_chain(query_fact, rules, starter_facts):
             print("Bot: Yes, this is possible!")
         else:
-            print("Bot: I'm not sure, but I will check for related facts.")
-            responses = get_response(responseDictionary, inferred_facts)
-            for value in responses:
-                print(f"Bot: {value}")
-        print()
+            print("Bot: I'm not sure, but here are some related things we offer:")
+
+        # Provide responses from inferred facts (if any)
+        related_responses = get_response(responseDictionary, inferred_facts)
+        for res in related_responses:
+            print(f"Bot: {res}")
+        print() 
         
 
 if __name__ == "__main__":
