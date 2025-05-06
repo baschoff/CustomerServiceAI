@@ -81,9 +81,25 @@ queryDictionary = {
 starter_facts = ['offer_cpu_intel']
 
 rules = [
-    ({'interest_budget'}, {'recommend_budget_cpu', 'recommend_budget_motherboard', 'recommend_budget_ram', 'recommend_ budget_gpu', 'recommend_budget_ssd'}), 
-    ({'interest_premium'}, {'recommend_premium_cpu', 'recommend_premium_motherboard', 'recommend_premium_ram', 'recommend_ premium_gpu', 'recommend_premium_ssd'}),
+    # Budget interests
+    ({'interest_budget'}, {
+        'recommend_budget_cpu', 'recommend_budget_motherboard', 'recommend_budget_ram',
+        'recommend_budget_gpu', 'recommend_budget_ssd'
+    }),
 
+    # Brand preferences
+    ({'interest_intel'}, {'recommend_intel_cpu', 'recommend_intel_motherboard'}),
+    ({'interest_amd'}, {'recommend_amd_cpu', 'recommend_amd_motherboard', 'recommend_amd_gpu'}),
+    ({'interest_nvidia'}, {'recommend_nvidia_gpu'}),
+
+    # Specific interests
+    ({'interest_ddr4'}, {'recommend_ddr4'}),
+    ({'interest_ddr5'}, {'recommend_ddr5'}),
+    ({'interest_ssd'}, {'recommend_ssd'}),
+    ({'interest_cpu'}, {'recommend_cpu'}),
+    ({'interest_gpu'}, {'recommend_gpu'}),
+    ({'interest_motherboard'}, {'recommend_motherboard'}),
+    ({'interest_ram'}, {'recommend_ram'}),
 ]
 
 # Function to extract keywords and responses from the knowledge base
