@@ -4,16 +4,49 @@ all_facts = ['offer_cpu_intel', 'offer_cpu_amd','offer_motherboard_intel', 'offe
          'offer_ram_ddr4', 'offer_ram_ddr5', 'offer_ssd', 'offer_gpu_nvidea','offer_gpu_amd']
 
 responseDictionary = {
+    # offer line
     'offer_cpu_intel': "We offer an Intel CPU.",
     'offer_cpu_amd': "We offer an AMD CPU.",
     'offer_motherboard_intel': "We offer an Intel motherboard.",
     'offer_motherboard_amd': "We offer an AMD motherboard.",
-    'offer_ram_ddr4': "We offer an DDR4 RAM.",
-    'offer_ram_ddr5': "We offer an DDR5 RAM.",
-    'offer_ssd': "We offer an SSD.",
+    'offer_ram_ddr4': "We offer DDR4 RAM modules.",
+    'offer_ram_ddr5': "We offer DDR5 RAM modules.",
+    'offer_ssd': "We offer a variety of SSDs.",
     'offer_gpu_nvidea': "We offer an NVIDIA GPU.",
-    'offer_gpu_amd': "We offer an AMD GPU."
+    'offer_gpu_amd': "We offer an AMD GPU.",
+    'offer_cpu': "We offer both Intel and AMD CPUs.",
+    'offer_gpu': "We offer both NVIDIA and AMD GPUs.",
+    'offer_motherboard': "We offer motherboards compatible with Intel and AMD CPUs.",
+    'offer_ram': "We provide DDR4 and DDR5 RAM options.",
+    'offer_intel': "We provide Intel CPUs and compatible motherboards.",
+    'offer_amd': "We offer AMD CPUs, GPUs, and motherboards.",
+    'offer_nvidea': "You might be looking for NVIDIA — yes, we offer NVIDIA GPUs.",
+    'offer_budget': "We offer budget-friendly options for CPUs, GPUs, RAM, and SSDs.",
+    'offer_premium': "We provide high-performance components for premium setups.",
+
+    # recommendation line
+    'recommend_budget_cpu': "We recommend AMD Ryzen 3 or Intel i3 for budget builds.",
+    'recommend_budget_motherboard': "We suggest entry-level B-series motherboards.",
+    'recommend_budget_ram': "We suggest 8GB DDR4 RAM for budget systems.",
+    'recommend_budget_gpu': "We recommend AMD RX 6400 or NVIDIA GTX 1650 for budget gamers.",
+    'recommend_budget_ssd': "We suggest 256GB SATA SSDs as a low-cost option.",
+    'recommend_intel_cpu': "We recommend Intel's 12th/13th Gen CPUs based on your interest.",
+    'recommend_intel_motherboard': "We suggest Z690 or B660 motherboards for Intel CPUs.",
+    'recommend_amd_cpu': "You might like AMD Ryzen 5 or Ryzen 7 processors.",
+    'recommend_amd_motherboard': "We recommend B550 or X570 motherboards for AMD builds.",
+    'recommend_amd_gpu': "Consider the AMD RX 6600 or RX 6700 XT for great performance.",
+    'recommend_nvidia_gpu': "We recommend NVIDIA RTX 3060 or higher for optimal gaming.",
+    'recommend_ddr4': "DDR4 is great for cost-effective builds with wide compatibility.",
+    'recommend_ddr5': "DDR5 offers faster speeds — ideal for new-gen systems.",
+    'recommend_ssd': "We recommend NVMe SSDs for fast boot times and app loading.",
+    'recommend_cpu': "Based on your needs, we suggest either Intel or AMD processors.",
+    'recommend_gpu': "You may consider GPUs from NVIDIA or AMD based on your use-case.",
+    'recommend_motherboard': "We recommend compatible motherboards based on your CPU choice.",
+    'recommend_ram': "We suggest 16GB DDR4 or DDR5 for modern computing needs.",
+    'recommend_brand': "We support recommendations for Intel, AMD, and NVIDIA brands.",
+    'recommend_premium': "For premium setups, we recommend high-end CPUs, GPUs, and Gen4 SSDs."
 }
+
 
 queryDictionary = {
     # offers
